@@ -1,0 +1,76 @@
+:root {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #0b0b0c;
+  background: #ffffff;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0 22px;
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.muted { color: #6b7280; }
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+}
+
+.btn {
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #0b0b0c;
+  color: white;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background: white;
+  color: #0b0b0c;
+}
+
+.input, .select {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 12px;
+  outline: none;
+  background: white;
+}
+
+.player {
+  width: 100%;
+}
