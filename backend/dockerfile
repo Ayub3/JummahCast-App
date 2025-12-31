@@ -1,13 +1,27 @@
-FROM node:25.2.1-alpine
+FROM node:25.2.1-alpine AS stage
 
 WORKDIR /backend
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
+RUN mkdir -p /backend/data
+
+FROM dhi.io/node:25-alpine3.22 AS runtime
+
+WORKDIR /backend
+
+COPY --from=stage /backend/node_modules ./node_modules
+
+COPY --from=stage /backend/index.js ./
+
+COPY --from=stage /backend/db.js ./
+
+COPY --from=stage --chown=1000:1000 /backend/data /app/data
+
 EXPOSE 5173
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
