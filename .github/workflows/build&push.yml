@@ -9,11 +9,7 @@ on:
         type: choice
         options:
           - dev
-          - staging
-          - prod
-      account_number:
-        description: "AWS Account Number"
-        required: true
+          - prod 
       aws_region:
         description: "AWS Region"
         required: true
@@ -35,11 +31,9 @@ jobs:
   build-and-scan:
     name: Build and Scan Docker Image
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.Environment }}
     timeout-minutes: 20
-    outputs:
-      image-uri: ${{ steps.image-uri.outputs.uri }}
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
