@@ -142,4 +142,5 @@ vite.config.ts.timestamp-*
 backend/uploads/*
 backend/data/*
 
-
+!backend/uploads/.gitkeep
+!backend/data/.gitkeep
