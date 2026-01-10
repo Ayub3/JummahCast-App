@@ -9,7 +9,9 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - uploads:/app/uploads
+      - uploads:/backend/uploads
+      - data:/backend/data
+     
     environment:
       NODE_ENV: development
       STORAGE_TYPE: local
@@ -17,3 +19,4 @@ services:
 
 volumes:
   uploads:
+  data:
