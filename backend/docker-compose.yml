@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jummahcast-backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - uploads:/app/uploads
+    environment:
+      NODE_ENV: development
+      STORAGE_TYPE: local
+    restart: unless-stopped
+
+volumes:
+  uploads:
