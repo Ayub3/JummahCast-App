@@ -48,20 +48,20 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-     
-    #   - name: Run Trivy Vulnerability Scanner (Dockerfile)
-    #     uses: aquasecurity/trivy-action@0.33.1
-    #     with:
-    #       scan-type: "config"
-    #       scan-ref: "backend/Dockerfile"
-    #       exit-code: "1"
-    #       severity: "MEDIUM,HIGH,CRITICAL"
-    #       format: "table"
-
+    
       - name: Login to DHI registry
         run: |
           echo "${{ secrets.DOCKER_TOKEN }}" | docker login dhi.io \
             -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+     
+      - name: Run Trivy Vulnerability Scanner (Dockerfile)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: "config"
+          scan-ref: "backend/Dockerfile"
+          exit-code: "1"
+          severity: "MEDIUM,HIGH,CRITICAL"
+          format: "table"
 
       - name: Build Docker Image
         run: |

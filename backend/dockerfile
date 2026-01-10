@@ -22,6 +22,9 @@ COPY --from=stage /backend/db.js ./
 
 COPY --from=stage --chown=1000:1000 /backend/data /app/data
 
-EXPOSE 5173
+EXPOSE 4000
+
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost/4000/health || exit 1
 
 CMD ["node", "index.js"]
