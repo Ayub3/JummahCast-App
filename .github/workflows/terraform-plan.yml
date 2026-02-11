@@ -15,7 +15,7 @@ on:
         default: dev
 
 env:
-  TF_WORKING_DIR: terraform
+  TF_WORKING_DIR: infra
 
 jobs:
   terraform-plan:
