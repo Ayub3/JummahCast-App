@@ -37,7 +37,7 @@ jobs:
           aws-region: "eu-west-2"
 
       - name: Lint Terraform
-        run: terraform fmt -check
+        run: terraform fmt -recursive
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Init
