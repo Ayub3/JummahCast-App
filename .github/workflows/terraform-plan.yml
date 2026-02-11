@@ -1,0 +1,49 @@
+name: Terraform Plan
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'TF Plan for dev deployments'
+        required: true
+        default: dev
+
+env:
+  TF_WORKING_DIR: terraform
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "arn:aws:iam::548470137685:role/dev-oidc-role"
+          aws-region: "eu-west-2"
+
+      - name: Lint Terraform
+        run: terraform fmt -check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -backend-config="infra/env/dev/backend.conf"
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan -var-file="infra/env/dev/dev.tfvars"

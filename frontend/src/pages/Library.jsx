@@ -32,23 +32,18 @@ export default function Library() {
     }
   }
 
-  // Debounce search/filter changes
   useEffect(() => {
     const t = setTimeout(load, 250);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, speaker, sort]);
 
-  // Force audio to reload + attempt autoplay when changing track
   useEffect(() => {
     if (!now) return;
     const el = audioRef.current;
     if (!el) return;
 
-    // Ensure new src is loaded
     el.load();
-
-    // Attempt to autoplay (should succeed because it's user-initiated click)
     const p = el.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
   }, [now?.id]);
@@ -60,10 +55,14 @@ export default function Library() {
     return parts.length ? parts.join(" · ") : "Search and explore weekly khutbahs.";
   }, [speaker, q]);
 
+  // Responsive columns for filters
+  const filterCols =
+    "repeat(auto-fit, minmax(220px, 1fr))";
+
   return (
     <div className="grid">
-      <div className="card">
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
+      <div className="card" style={{ textAlign: "left" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline", flexWrap: "wrap" }}>
           <div>
             <div style={{ fontSize: 18, fontWeight: 700 }}>Library</div>
             <div className="muted" style={{ marginTop: 6 }}>{subtitle}</div>
@@ -73,7 +72,14 @@ export default function Library() {
           </button>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 220px 220px", gap: 10, marginTop: 14 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: filterCols,
+            gap: 10,
+            marginTop: 14,
+          }}
+        >
           <input
             className="input"
             placeholder="Search by title or speaker…"
@@ -106,7 +112,7 @@ export default function Library() {
             </div>
 
             <audio
-              key={now.id}              // forces remount when track changes
+              key={now.id}
               ref={audioRef}
               className="player"
               controls
@@ -119,7 +125,7 @@ export default function Library() {
         )}
       </div>
 
-      <div className="card">
+      <div className="card" style={{ textAlign: "left" }}>
         <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
           Results <span className="muted">({items.length})</span>
         </div>
