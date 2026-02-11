@@ -1,18 +1,15 @@
 name: Terraform Plan
 
 on:
-  push:
-    branches-ignore:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       environment:
-        description: 'TF Plan for dev deployments'
+        description: "Environment to deploy (dev, staging, prod)"
         required: true
-        default: dev
+        type: choice
+        options:
+          - dev
+          - prod 
 
 env:
   TF_WORKING_DIR: infra

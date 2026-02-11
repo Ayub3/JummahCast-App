@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "git@github.com:Ayub3/aws_terraform_modules.git"
+  source = "https://github.com/Ayub3/aws_terraform_modules.git/terraform/vpc"
   aws_vpc = {
     name                 = "${var.project}-${var.env}-vpc"
     cidr_block           = "10.0.0.0/16"
