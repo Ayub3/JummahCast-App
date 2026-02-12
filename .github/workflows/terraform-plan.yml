@@ -39,8 +39,8 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform init -backend-config="infra/env/dev/backend.conf"
+        run: terraform init -backend-config="env/dev/backend.conf"
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -var-file="infra/env/dev/dev.tfvars"
+        run: terraform plan -var-file="env/dev/dev.tfvars"
