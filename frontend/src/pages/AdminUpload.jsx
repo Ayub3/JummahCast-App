@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { uploadSermon } from "../lib/api.js";
 
 export default function AdminUpload() {
@@ -25,7 +26,9 @@ export default function AdminUpload() {
     try {
       await uploadSermon({ title, speaker, date, file });
       setMsg("Uploaded. It will now appear in the Library.");
-      setTitle(""); setSpeaker(""); setDate("");
+      setTitle("");
+      setSpeaker("");
+      setDate("");
       setPickedName("");
       if (fileRef.current) fileRef.current.value = ""; // clear input
     } catch (e2) {
@@ -37,14 +40,21 @@ export default function AdminUpload() {
 
   return (
     <div className="grid">
-      <div className="card">
-        <div style={{ fontSize: 18, fontWeight: 700 }}>Admin upload</div>
+      <div className="card" style={{ textAlign: "left" }}>
+        {/* Back link added */}
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
+          <div style={{ fontSize: 18, fontWeight: 700 }}>Admin upload</div>
+          <Link className="muted" to="/admin/login" style={{ textDecoration: "none" }}>
+            Back
+          </Link>
+        </div>
+
         <div className="muted" style={{ marginTop: 6 }}>Local-only v1. (Auth + S3 comes next.)</div>
         {err ? <div style={{ marginTop: 12, color: "crimson" }}>{err}</div> : null}
         {msg ? <div style={{ marginTop: 12 }}>{msg}</div> : null}
       </div>
 
-      <div className="card">
+      <div className="card" style={{ textAlign: "left" }}>
         <form onSubmit={submit} className="grid">
           <input className="input" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
           <input className="input" placeholder="Speaker" value={speaker} onChange={(e) => setSpeaker(e.target.value)} />
