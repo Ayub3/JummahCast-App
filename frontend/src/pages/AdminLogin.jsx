@@ -1,15 +1,40 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
+  
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function submit(e) {
+  // Redirect if already logged in
+  if (isAuthenticated()) {
+    const from = location.state?.from?.pathname || "/admin/upload";
+    navigate(from, { replace: true });
+    return null;
+  }
+
+  async function submit(e) {
     e.preventDefault();
-    // MVP: auth not wired yet -> go straight to upload
-    navigate("/admin/upload");
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(email, pw);
+      
+      // Redirect to previous page or upload page
+      const from = location.state?.from?.pathname || "/admin/upload";
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -19,7 +44,7 @@ export default function AdminLogin() {
           <div>
             <div style={{ fontSize: 18, fontWeight: 800 }}>Admin login</div>
             <div className="muted" style={{ marginTop: 6 }}>
-              Auth isn’t connected yet — Sign in takes you to Upload.
+              Local dev credentials: admin@jummahcast.local / admin123
             </div>
           </div>
 
@@ -27,6 +52,12 @@ export default function AdminLogin() {
             Back to site
           </Link>
         </div>
+
+        {error && (
+          <div style={{ marginTop: 12, padding: 12, background: '#fee', borderRadius: 4, color: '#c00' }}>
+            {error}
+          </div>
+        )}
       </div>
 
       <div className="card" style={{ textAlign: "left" }}>
@@ -38,6 +69,8 @@ export default function AdminLogin() {
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             autoComplete="email"
+            disabled={loading}
+            required
           />
           <input
             className="input"
@@ -46,14 +79,16 @@ export default function AdminLogin() {
             onChange={(e) => setPw(e.target.value)}
             type="password"
             autoComplete="current-password"
+            disabled={loading}
+            required
           />
 
-          <button className="btn" type="submit">
-            Sign in
+          <button className="btn" type="submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
 
           <div className="muted" style={{ fontSize: 12 }}>
-            Coming next: Cognito + route protection for <code>/admin/upload</code>.
+            🔐 In production, this will use AWS Cognito authentication.
           </div>
         </form>
       </div>

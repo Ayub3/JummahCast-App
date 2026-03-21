@@ -16,15 +16,22 @@ WORKDIR /backend
 
 COPY --from=stage /backend/node_modules ./node_modules
 
-COPY --from=stage /backend/index.js ./
+COPY --from=stage /backend/src ./src
 
 COPY --from=stage /backend/db.js ./
 
 COPY --from=stage --chown=1000:1000 /backend/data /app/data
+
+COPY --from=stage /backend/adapters ./adapters
+
+COPY --from=stage /backend/config.js ./
+
+COPY --from=stage /backend/package*.json ./
+
 
 EXPOSE 4000
 
 # HEALTHCHECK --interval=5m --timeout=3s \
 #   CMD curl -f http://localhost:4000/health || exit 1
 
-CMD ["node", "index.js"]
+CMD ["node", "src/index.js"]

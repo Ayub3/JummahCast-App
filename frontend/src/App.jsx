@@ -1,10 +1,13 @@
 import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import Landing from "./pages/Landing.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminUpload from "./pages/AdminUpload.jsx";
 
-export default function App() {
+function AppContent() {
   const location = useLocation();
+  const { user, logout } = useAuth();
   const isLanding = location.pathname === "/";
 
   return (
@@ -15,13 +18,26 @@ export default function App() {
             <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
               Khutbah Library
             </Link>
-            <span className="muted"> · local</span>
+            <span className="muted"> · {user ? `${user.name}` : 'local'}</span>
           </div>
 
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            <Link className="muted" to="/admin/login" style={{ textDecoration: "none" }}>
-              Admin login
-            </Link>
+            {user ? (
+              <>
+                <span className="muted">{user.email}</span>
+                <button
+                  className="btn secondary"
+                  onClick={logout}
+                  style={{ padding: '4px 12px', fontSize: '14px' }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link className="muted" to="/admin/login" style={{ textDecoration: "none" }}>
+                Admin login
+              </Link>
+            )}
           </div>
         </div>
       ) : null}
@@ -31,11 +47,26 @@ export default function App() {
 
         <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/upload" element={<AdminUpload />} />
+        <Route
+          path="/admin/upload"
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminUpload />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

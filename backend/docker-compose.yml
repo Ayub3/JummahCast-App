@@ -1,3 +1,5 @@
+# 
+
 version: "3.9"
 
 services:
@@ -11,8 +13,9 @@ services:
     volumes:
       - ./uploads:/backend/uploads
       - ./data:/backend/data
-     
     environment:
       NODE_ENV: development
-      STORAGE_TYPE: local
+      DB_DRIVER: sqlite
+      BLOB_DRIVER: local
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:4173"
     restart: unless-stopped
