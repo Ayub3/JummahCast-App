@@ -73,6 +73,75 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  const signup = async (email, password, name, mosque) => {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'}/api/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name, mosque: mosque || undefined }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Signup failed');
+    }
+
+    const data = await response.json();
+    const { token: newToken, user: newUser } = data;
+
+    localStorage.setItem('auth_token', newToken);
+    setToken(newToken);
+    setUser(newUser);
+
+    return data;
+  };
+
+  const requestPasswordReset = async (email) => {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'}/api/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to request password reset');
+    }
+
+    return response.json();
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'}/api/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, password: newPassword }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to reset password');
+    }
+
+    return response.json();
+  };
+
+  const socialLogin = async (provider) => {
+    // For local development, show a helpful message
+    if (import.meta.env.MODE === 'development') {
+      throw new Error(`${provider} login requires AWS Cognito setup. In production, this will redirect to Cognito Hosted UI.`);
+    }
+
+    // In production, this would redirect to Cognito OAuth URL
+    // const cognitoUrl = `${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/authorize?identity_provider=${provider}&...`;
+    // window.location.href = cognitoUrl;
+    
+    throw new Error('Social login not yet configured');
+  };
+
   const logout = () => {
     localStorage.removeItem('auth_token');
     setToken(null);
@@ -92,6 +161,10 @@ export function AuthProvider({ children }) {
     token,
     loading,
     login,
+    signup,
+    requestPasswordReset,
+    resetPassword,
+    socialLogin,
     logout,
     isAuthenticated,
     hasRole,

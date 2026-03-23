@@ -7,6 +7,7 @@ import { createAuthProvider } from './infrastructure/auth/index.js';
 
 // Services
 import { SermonRepository } from './repositories/SermonRepository.js';
+import { UserRepository } from './repositories/UserRepository.js';
 import { SermonService } from './services/SermonService.js';
 import { UploadService } from './services/UploadService.js';
 import { AuthService } from './services/AuthService.js';
@@ -17,7 +18,7 @@ import { AdminController } from './api/controllers/AdminController.js';
 import { AuthController } from './api/controllers/AuthController.js';
 
 // Routes
-import { createSermonRoutes, createSpeakerRoutes } from './api/routes/sermons.js';
+import { createSermonRoutes, createSpeakerRoutes, createMosqueRoutes } from './api/routes/sermons.js';
 import { createAdminRoutes } from './api/routes/admin.js';
 import { createAuthRoutes } from './api/routes/auth.js';
 
@@ -41,10 +42,13 @@ export function createApp() {
   // Infrastructure
   const db = createDbAdapter(config);
   const blob = createBlobAdapter(config);
-  const authProvider = createAuthProvider(config);
-
+  
   // Repositories
   const sermonRepository = new SermonRepository(db);
+  const userRepository = new UserRepository(db);
+  
+  // Auth Provider (needs userRepository for local auth)
+  const authProvider = createAuthProvider(config, userRepository);
 
   // Services
   const sermonService = new SermonService(sermonRepository);
@@ -97,6 +101,7 @@ export function createApp() {
   // API Routes
   app.use('/api/sermons', createSermonRoutes(sermonController));
   app.use('/api/speakers', createSpeakerRoutes(sermonController));
+  app.use('/api/mosques', createMosqueRoutes(sermonController));
   app.use('/api/admin', createAdminRoutes(adminController, authProvider));
   app.use('/api/auth', createAuthRoutes(authController, authProvider));
 

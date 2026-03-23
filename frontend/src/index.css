@@ -66,6 +66,30 @@ body { margin: 0; }
   color: #0b0b0c;
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #0b0b0c;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+}
+
+.btn.social-btn:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.btn.google-btn svg,
+.btn.facebook-btn svg {
+  flex-shrink: 0;
+}
+
 .input, .select {
   width: 100%;
   border: 1px solid #e5e7eb;
@@ -73,6 +97,11 @@ body { margin: 0; }
   padding: 12px 12px;
   outline: none;
   background: white;
+}
+
+.input:focus, .select:focus {
+  border-color: #0b0b0c;
+  box-shadow: 0 0 0 2px rgba(11, 11, 12, 0.05);
 }
 
 .player {

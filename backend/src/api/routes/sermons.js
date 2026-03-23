@@ -28,8 +28,15 @@ export function createSermonRoutes(sermonController) {
  */
 export function createSpeakerRoutes(sermonController) {
   const router = express.Router();
-
   router.get('/', sermonController.listSpeakers);
+  return router;
+}
 
+/**
+ * Mosque Routes
+ */
+export function createMosqueRoutes(sermonController) {
+  const router = express.Router();
+  router.get('/', sermonController.listMosques);
   return router;
 }

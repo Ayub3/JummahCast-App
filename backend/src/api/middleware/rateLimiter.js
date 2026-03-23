@@ -71,11 +71,25 @@ export const rateLimiters = {
     message: 'Too many requests from this IP',
   }),
 
-  // Strict limiter for auth endpoints
+  // Strict limiter for login attempts only
   auth: createRateLimiter({
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: 20, // 20 login attempts per 15 min (relaxed for dev)
     message: 'Too many login attempts',
+  }),
+
+  // Lenient limiter for signup (creating a new account is a one-time action)
+  signup: createRateLimiter({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10,
+    message: 'Too many signup attempts',
+  }),
+
+  // Lenient limiter for password reset requests
+  forgotPassword: createRateLimiter({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10,
+    message: 'Too many password reset requests',
   }),
 
   // Upload rate limit (per authenticated user)

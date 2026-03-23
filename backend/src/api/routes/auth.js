@@ -10,12 +10,36 @@ import { rateLimiters } from '../middleware/rateLimiter.js';
 export function createAuthRoutes(authController, authProvider) {
   const router = express.Router();
 
-  // Login (local auth only)
+  // Signup – uses its own lenient limiter (not the strict login one)
+  router.post(
+    '/signup',
+    rateLimiters.signup,
+    validateRequest(schemas.auth.signup),
+    authController.signup
+  );
+
+  // Login – strict rate limit to prevent brute force
   router.post(
     '/login',
     rateLimiters.auth,
     validateRequest(schemas.auth.login),
     authController.login
+  );
+
+  // Forgot password – lenient, users may retry
+  router.post(
+    '/forgot-password',
+    rateLimiters.forgotPassword,
+    validateRequest(schemas.auth.forgotPassword),
+    authController.forgotPassword
+  );
+
+  // Reset password – lenient, token itself is the security
+  router.post(
+    '/reset-password',
+    rateLimiters.forgotPassword,
+    validateRequest(schemas.auth.resetPassword),
+    authController.resetPassword
   );
 
   // Get current user (requires auth)

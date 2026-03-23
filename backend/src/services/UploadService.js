@@ -15,7 +15,7 @@ export class UploadService {
   /**
    * Create new sermon with audio file
    */
-  async createSermon({ title, speaker, date, file, uploadedBy }) {
+  async createSermon({ title, speaker, date, description, file, uploadedBy, mosque }) {
     // Validate file
     this.validateFile(file);
 
@@ -41,7 +41,9 @@ export class UploadService {
       storageKey,
       mimetype: file.mimetype,
       size: file.size,
-      durationSeconds: null, // TODO: Extract from audio file
+      durationSeconds: null,
+      mosque: mosque ?? null,
+      description: description ?? null,
       uploadedBy,
     });
 
@@ -56,6 +58,9 @@ export class UploadService {
       mimetype: sermon.mimetype,
       size: sermon.size,
       durationSeconds: sermon.durationSeconds,
+      mosque: sermon.mosque,
+      description: sermon.description,
+      uploadedBy: sermon.uploadedBy,
       createdAt: sermon.createdAt,
     });
 

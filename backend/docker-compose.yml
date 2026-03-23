@@ -15,7 +15,42 @@ services:
       - ./data:/backend/data
     environment:
       NODE_ENV: development
+      PORT: 4000
+      
+      # Database Driver
       DB_DRIVER: sqlite
+      # DB_DRIVER: postgres
+      
+      # Storage Driver
       BLOB_DRIVER: local
+      # BLOB_DRIVER: s3
+      
+      # Authentication Driver
+      AUTH_MODE: local
+      # AUTH_MODE: cognito
+      
+      # Local Auth (JWT) - IMPORTANT: Generate your own secret!
+      # Run: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+      JWT_SECRET: ${JWT_SECRET:-please-generate-a-secure-secret-see-env-example}
+      
+      # CORS
       CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:4173"
+      
+      # PostgreSQL (uncomment when using DB_DRIVER=postgres)
+      # DB_HOST: postgres
+      # DB_PORT: 5432
+      # DB_NAME: jummahcast
+      # DB_USER: postgres
+      # DB_PASSWORD: postgres123
+      # DB_SSL: false
+      
+      # AWS S3 (uncomment when using BLOB_DRIVER=s3)
+      # AWS_REGION: eu-west-2
+      # S3_BUCKET: jummahcast-dev-sermons
+      # SIGNED_URL_TTL_SECONDS: 300
+      
+      # AWS Cognito (uncomment when using AUTH_MODE=cognito)
+      # COGNITO_USER_POOL_ID: eu-west-2_XXXXXXXXX
+      # COGNITO_CLIENT_ID: xxxxxxxxxxxxxxxxxx
+      # AWS_REGION: eu-west-2
     restart: unless-stopped

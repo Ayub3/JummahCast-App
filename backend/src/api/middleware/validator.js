@@ -74,6 +74,7 @@ export const schemas = {
         title: z.string().min(1).max(200),
         speaker: z.string().min(1).max(100),
         date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+        description: z.string().max(1000).optional(),
       }),
     }),
 
@@ -81,6 +82,7 @@ export const schemas = {
       query: z.object({
         q: z.string().max(100).optional(),
         speaker: z.string().max(100).optional(),
+        mosque: z.string().max(200).optional(),
         sort: z.enum(['date_desc', 'date_asc', 'title_asc', 'title_desc']).optional(),
       }),
     }),
@@ -98,6 +100,33 @@ export const schemas = {
         email: z.string().email(),
         password: z.string().min(6),
       }),
+    }),
+
+    signup: z.object({
+      body: z.object({
+        email: z.string().email(),
+        password: z.string().min(8, 'Password must be at least 8 characters'),
+        name: z.string().min(2).max(100),
+        mosque: z.string().min(2).max(200).optional(),
+      }),
+    }),
+
+    forgotPassword: z.object({
+      body: z.object({
+        email: z.string().email(),
+      }),
+    }),
+
+    resetPassword: z.object({
+      body: z.object({
+        token: z.string().min(1),
+        // Accept both 'password' and 'newPassword' for compatibility
+        password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+        newPassword: z.string().min(8, 'Password must be at least 8 characters').optional(),
+      }).refine(
+        data => data.password || data.newPassword,
+        { message: 'password is required', path: ['password'] }
+      ),
     }),
   },
 };

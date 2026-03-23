@@ -15,21 +15,25 @@ export class SermonController {
    * List all sermons with optional filtering
    */
   listSermons = asyncHandler(async (req, res) => {
-    const { q, speaker, sort } = req.query;
-    
-    const items = await this.sermonService.listSermons({ q, speaker, sort });
-    
+    const { q, speaker, mosque, sort } = req.query;
+    const items = await this.sermonService.listSermons({ q, speaker, mosque, sort });
     res.json({ items });
   });
 
   /**
    * GET /api/speakers
-   * List all unique speakers
    */
   listSpeakers = asyncHandler(async (req, res) => {
     const speakers = await this.sermonService.getSpeakers();
-    
     res.json({ speakers });
+  });
+
+  /**
+   * GET /api/mosques
+   */
+  listMosques = asyncHandler(async (req, res) => {
+    const mosques = await this.sermonService.getMosques();
+    res.json({ mosques });
   });
 
   /**

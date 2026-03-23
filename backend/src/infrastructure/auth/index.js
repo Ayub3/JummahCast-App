@@ -5,7 +5,7 @@ import { CognitoAuthProvider } from './CognitoAuthProvider.js';
  * Authentication Factory
  * Creates the appropriate auth provider based on environment
  */
-export function createAuthProvider(config) {
+export function createAuthProvider(config, userRepository = null) {
   const authMode = config.AUTH_MODE || 'local';
 
   if (authMode === 'cognito') {
@@ -18,5 +18,10 @@ export function createAuthProvider(config) {
   }
 
   console.log('🔐 Using Local authentication (dev mode)');
-  return new LocalAuthProvider(config.JWT_SECRET);
+  
+  if (!userRepository) {
+    throw new Error('UserRepository is required for local authentication');
+  }
+  
+  return new LocalAuthProvider(userRepository, config.JWT_SECRET);
 }

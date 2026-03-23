@@ -7,8 +7,8 @@ export class SermonRepository {
     this.db = dbAdapter;
   }
 
-  async findAll({ q, speaker, sort } = {}) {
-    return this.db.listSermons({ q, speaker, sort });
+  async findAll({ q, speaker, mosque, sort } = {}) {
+    return this.db.listSermons({ q, speaker, mosque, sort });
   }
 
   async findById(id) {
@@ -21,5 +21,12 @@ export class SermonRepository {
 
   async listUniqueSpeakers() {
     return this.db.listSpeakers();
+  }
+
+  async listUniqueMosques() {
+    if (typeof this.db.listMosques === 'function') {
+      return this.db.listMosques();
+    }
+    return [];
   }
 }

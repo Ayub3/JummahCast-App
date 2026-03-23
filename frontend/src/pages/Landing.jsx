@@ -35,15 +35,15 @@ export default function Landing() {
         <div className="container" style={{ paddingTop: 34, paddingBottom: 16 }}>
           <h1 style={{ margin: 0, fontSize: 42, letterSpacing: -0.6 }}>Khutbah Library</h1>
           <p style={{ marginTop: 10, fontSize: 16, opacity: 0.8, maxWidth: 720 }}>
-            Listen to khutbahs and talks. Admins can upload new audio. (Auth coming later.)
+            Listen to weekly khutbahs and Islamic talks. Login with your account to access admin features.
           </p>
 
           <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
             <button className="btn" onClick={() => goSection("lectures")}>
               Browse lectures
             </button>
-            <Link className="btn secondary" to="/admin/login" style={{ textDecoration: "none" }}>
-              Admin login
+            <Link className="btn secondary" to="/login" style={{ textDecoration: "none" }}>
+              Login
             </Link>
           </div>
         </div>
@@ -54,9 +54,13 @@ export default function Landing() {
         <div className="container" style={{ paddingTop: 18, paddingBottom: 18 }}>
           <div className="card" style={{ textAlign: "left" }}>
             <h2 style={{ marginTop: 0 }}>About</h2>
+            <p style={{ opacity: 0.85, lineHeight: 1.6 }}>
+              A modern platform for streaming and managing Islamic lectures. Features role-based access control:
+              all users can browse and listen, while admin users can upload new content.
+            </p>
             <p style={{ opacity: 0.85, lineHeight: 1.6, marginBottom: 0 }}>
-              MVP focused on a clean library + admin upload flow. Later: Cognito login, S3 storage,
-              DynamoDB metadata, ECS + ALB, CloudFront, WAF, and CI/CD.
+              Built with environment-aware architecture - runs locally with SQLite and file storage, 
+              seamlessly switches to AWS (Cognito, RDS, S3) in production without code changes.
             </p>
           </div>
         </div>

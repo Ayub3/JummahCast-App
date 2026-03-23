@@ -16,6 +16,30 @@ export class AuthService {
   }
 
   /**
+   * Signup new user
+   * Only used for local auth (Cognito handles this client-side)
+   */
+  async signup(userData) {
+    return this.authProvider.signup(userData);
+  }
+
+  /**
+   * Request password reset
+   * Only used for local auth (Cognito handles this client-side)
+   */
+  async requestPasswordReset(email) {
+    return this.authProvider.requestPasswordReset(email);
+  }
+
+  /**
+   * Reset password with token
+   * Only used for local auth (Cognito handles this client-side)
+   */
+  async resetPassword(token, newPassword) {
+    return this.authProvider.resetPassword(token, newPassword);
+  }
+
+  /**
    * Validate token
    */
   async validateToken(token) {

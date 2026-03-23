@@ -13,9 +13,8 @@ export class SermonService {
   /**
    * List sermons with filtering and sorting
    */
-  async listSermons({ q, speaker, sort } = {}) {
-    const sermons = await this.repository.findAll({ q, speaker, sort });
-    return sermons;
+  async listSermons({ q, speaker, mosque, sort } = {}) {
+    return this.repository.findAll({ q, speaker, mosque, sort });
   }
 
   /**
@@ -23,11 +22,9 @@ export class SermonService {
    */
   async getSermon(id) {
     const sermon = await this.repository.findById(id);
-    
     if (!sermon) {
       throw new NotFoundError('Sermon not found');
     }
-
     return sermon;
   }
 
@@ -36,5 +33,12 @@ export class SermonService {
    */
   async getSpeakers() {
     return this.repository.listUniqueSpeakers();
+  }
+
+  /**
+   * Get list of unique mosques/uploaders
+   */
+  async getMosques() {
+    return this.repository.listUniqueMosques();
   }
 }
