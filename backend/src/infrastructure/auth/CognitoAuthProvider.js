@@ -86,7 +86,7 @@ export class CognitoAuthProvider extends AuthProvider {
    */
   extractRoles(payload) {
     const groups = payload['cognito:groups'] || [];
-    
+
     // Map Cognito groups to application roles
     const roleMapping = {
       'Admins': 'admin',
@@ -94,7 +94,13 @@ export class CognitoAuthProvider extends AuthProvider {
       'Moderators': 'moderator',
     };
 
-    return groups.map(group => roleMapping[group] || 'user').filter(Boolean);
+    // Any user in the Admins group gets the admin role.
+    // All other authenticated users default to 'user' — no group required.
+    if (groups.includes('Admins')) {
+      return ['admin'];
+    }
+
+    return ['user'];
   }
 
   /**
